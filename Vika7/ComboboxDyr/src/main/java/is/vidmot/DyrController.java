@@ -2,13 +2,12 @@
 package is.vidmot;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,16 +27,26 @@ public class DyrController {
      * Er private því við viljum ekki að aðrir klasar hafi beint aðgang að breytunni
      */
     private static final String[] dyrHeiti = {"Bird", "Cat", "Dog", "Rabbit", "Pig"};
-    @FXML
-    private ImageView dyramynd; // mynd af dýri
-    @FXML
-    private ComboBox<String> dyr; // combobox af streng
+    private static final Map<String, Image> dyramyndir = new HashMap<String, Image>();
 
+    @FXML
+    private ImageView fxDyramynd; // mynd af dýri
+    @FXML
+    private ComboBox<String> fxDyr; // combobox af streng
 
 
     public void initialize() {
         // Frumstilla gögnin fyrir ComboBox
         frumstillaGogn();
+        // búa til Images
+        for(String heiti: dyrHeiti) {
+            nyMynd(heiti);
+        }
+        // binda dýramyndirnar við valið á comboboxinu
+        fxDyr.getSelectionModel().selectedItemProperty()
+                .addListener((obs, gamla, nyja) -> {
+            fxDyramynd.setImage(dyramyndir.get(nyja));
+        });
     }
 
     /**
@@ -46,20 +55,18 @@ public class DyrController {
     private void frumstillaGogn() {
         ObservableList<String> dyraNofn =
                 FXCollections.observableArrayList(dyrHeiti);
-
         // tengjum gögnin við viðmótshlutinn þannig að gögnin birtist í notendaviðmótinu
-        dyr.setItems(dyraNofn);
+        fxDyr.setItems(dyraNofn);
     }
 
     /**
-     * Uppfærir mynd á dyramynd
+     * Býr til Image fyrir dýrið og setur í hakkatöflu
      *
      * @param name nafn á dýrinu
      */
-    private void uppfaeraMynd(String name) {
+    private void nyMynd(String name) {
         Image icon = buaTilMynd("myndir/" + name + ".gif");
-        if (icon != null)
-            dyramynd.setImage(icon);
+        dyramyndir.put(name, icon);
     }
 
     /**
@@ -79,20 +86,5 @@ public class DyrController {
             System.err.println("Fann ekki skrána " + path);
             return null;
         }
-    }
-
-    /**
-     * Atburðarhandler fyrir val á dyr
-     *
-     * @param evt upplýsingar um atburðinn, m.a. viðmótshluturinn sem bjó til atburðinn
-     */
-    @FXML
-    private void jDyrActionPerformed(ActionEvent evt) {
-        // Hvaða dýr er valið
-        // Sjáum að það er hægt að biðja ComboBoxið um að skila stakinu
-        String dyraNafn = dyr.getSelectionModel().getSelectedItem();
-
-        // Uppfærum mynd með nýju dýri
-        uppfaeraMynd(dyraNafn);
     }
 }
