@@ -26,8 +26,7 @@ public class MediaDemoController {
 
     // vinnslan
     private MediaPlayer mediaPlayer; // öll virknin fer fram hér
-    
-    private Media media;
+
     private static final String MEDIA_URL =
             "https://liveexample.pearsoncmg.com/common/sample.mp4";
 
@@ -37,7 +36,7 @@ public class MediaDemoController {
      * bindur volume property við volume hnappinn.
      */
     public void initialize() {
-      newMediaPlayer(MEDIA_URL);
+        newMediaPlayer(MEDIA_URL);
     }
 
     /**
@@ -78,6 +77,7 @@ public class MediaDemoController {
 
     /**
      * Handler til að rewind-a í byrjun
+     *
      * @param ignored ónotað
      */
     public void rewindAction(ActionEvent ignored) {
@@ -87,6 +87,7 @@ public class MediaDemoController {
     /**
      * Handler til að opna video. Ef video er þegar í keyrslu er það stoppað.
      * MediaView er bundinn við stærðina á umlykjandi StackPane
+     *
      * @param ignored
      */
     @FXML
